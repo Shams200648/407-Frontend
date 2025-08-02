@@ -58,7 +58,7 @@ function App() {
 
   return (
     <div className="font-sans p-6">
-      <h1 className="text-3xl font-bold mb-6"> Live Tuya Device Monitor</h1>
+      <h1 className="text-3xl font-bold mb-6"> Power Consumsion Monitoring Dashboard</h1>
 
       {data ? (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-xl">

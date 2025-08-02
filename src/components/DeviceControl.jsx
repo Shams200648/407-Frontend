@@ -79,14 +79,14 @@ export function DeviceControl() {
     <Card className="w-64">
       <CardHeader className="pb-3">
         <CardTitle className="text-base font-semibold">
-          Device Control
+          Device Control Switch
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
             <span className="text-sm font-medium text-gray-700">
-              Power Switch
+              Click to the switch to turn the device
             </span>
             <span className="text-xs text-gray-500">
               {initialLoading

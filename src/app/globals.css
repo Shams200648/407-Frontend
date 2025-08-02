@@ -216,3 +216,49 @@
     @apply bg-background text-foreground;
   }
 }
+/* ===== Enhanced Recharts Styling for Power Chart ===== */
+
+.chart-container {
+  @apply rounded-xl shadow-md p-4 ring-1 ring-border;
+  background-color: oklch(0.985 0 0); /* Light background (default) */
+}
+
+.dark .chart-container {
+  background-color: oklch(0.205 0 0); /* Dark background in dark mode */
+}
+
+/* Chart axis and grid styling */
+.recharts-cartesian-axis-tick {
+  @apply text-sm text-muted-foreground font-medium;
+}
+
+.recharts-cartesian-grid line {
+  stroke: oklch(0.92 0 0 / 0.5);
+  stroke-dasharray: 3 3;
+}
+
+.recharts-cartesian-axis-line,
+.recharts-cartesian-axis-tick-line {
+  display: none;
+}
+
+/* Smooth lines and dots */
+.recharts-area {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.5px;
+  opacity: 0.9;
+}
+
+.recharts-dot {
+  @apply fill-white stroke-[1.5px] stroke-black;
+}
+
+/* Tooltip and legend styling */
+.recharts-tooltip-wrapper {
+  @apply bg-muted text-muted-foreground border border-border rounded-md shadow-md p-2 text-sm;
+}
+
+.recharts-default-legend {
+  @apply mt-3 text-xs text-muted-foreground font-semibold;
+}

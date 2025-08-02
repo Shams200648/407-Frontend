@@ -33,18 +33,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+// Updated color set
 const chartConfig = {
   power: {
     label: "Power (W)",
-    color: "var(--chart-1)",
+    color: "#e6194B", // Crimson Red
   },
   current: {
     label: "Current (mA)",
-    color: "var(--chart-2)",
+    color: "#3cb44b", // Lime Green
   },
   voltage: {
     label: "Voltage (V)",
-    color: "var(--chart-3)",
+    color: "#4363d8", // Royal Blue
   },
 };
 
@@ -55,25 +56,16 @@ export function ChartAreaInteractive() {
   const [error, setError] = React.useState(null);
   const [refreshing, setRefreshing] = React.useState(false);
 
-  // Fetch data from API
   const fetchData = async (isRefresh = false) => {
     try {
-      if (isRefresh) {
-        setRefreshing(true);
-      } else {
-        setLoading(true);
-      }
+      if (isRefresh) setRefreshing(true);
+      else setLoading(true);
+
       setError(null);
-      const response = await fetch(
-        "https://four07-backend.onrender.com/main-chart/data"
-      );
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
+      const response = await fetch("https://four07-backend.onrender.com/main-chart/data");
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const result = await response.json();
-
       if (result.success) {
         setChartData(result.data);
       } else {
@@ -83,11 +75,8 @@ export function ChartAreaInteractive() {
       console.error("Error fetching data:", err);
       setError(err.message);
     } finally {
-      if (isRefresh) {
-        setRefreshing(false);
-      } else {
-        setLoading(false);
-      }
+      if (isRefresh) setRefreshing(false);
+      else setLoading(false);
     }
   };
 
@@ -99,17 +88,13 @@ export function ChartAreaInteractive() {
     fetchData(true);
   };
 
-  // Get filtered data based on time range
   const getFilteredData = () => {
     if (!chartData) return [];
-
     switch (timeRange) {
       case "1d":
         return chartData.today || [];
       case "7d":
-        const weekData = chartData.week || [];
-        console.log("Last 7 days data:", weekData);
-        return weekData;
+        return chartData.week || [];
       case "30d":
         return chartData.month || [];
       default:
@@ -119,11 +104,10 @@ export function ChartAreaInteractive() {
 
   const filteredData = getFilteredData();
 
-  // Show loading state
   if (loading) {
     return (
-      <Card className="pt-0">
-        <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
+      <Card className="pt-0 bg-gray-100">
+        <CardHeader className="flex items-center gap-2 border-b py-5 sm:flex-row">
           <div className="grid flex-1 gap-1">
             <CardTitle>Power Consumption Line Chart</CardTitle>
             <CardDescription>Loading power consumption data...</CardDescription>
@@ -141,11 +125,10 @@ export function ChartAreaInteractive() {
     );
   }
 
-  // Show error state
   if (error) {
     return (
-      <Card className="pt-0">
-        <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
+      <Card className="pt-0 bg-gray-100">
+        <CardHeader className="flex items-center gap-2 border-b py-5 sm:flex-row">
           <div className="grid flex-1 gap-1">
             <CardTitle>Power Consumption Line Chart</CardTitle>
             <CardDescription>Error loading data</CardDescription>
@@ -164,45 +147,31 @@ export function ChartAreaInteractive() {
   }
 
   return (
-    <Card className="pt-0">
-      <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
+    <Card className="pt-0 bg-gray-100">
+      <CardHeader className="flex items-center gap-2 border-b py-5 sm:flex-row">
         <div className="grid flex-1 gap-1">
           <CardTitle>Power Consumption Line Chart</CardTitle>
           <CardDescription>
-            Showing power consumption data for the selected time period
+            Visualizing power consumption over time
           </CardDescription>
         </div>
         <div className="flex items-center gap-2">
           <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger
-              className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex"
-              aria-label="Select a value"
-            >
+            <SelectTrigger className="hidden w-[160px] sm:flex">
               <SelectValue placeholder="Today" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl">
-              <SelectItem value="1d" className="rounded-lg">
-                Today
-              </SelectItem>
-              <SelectItem value="7d" className="rounded-lg">
-                Last 7 days
-              </SelectItem>
-              <SelectItem value="30d" className="rounded-lg">
-                Last 30 days
-              </SelectItem>
+            <SelectContent>
+              <SelectItem value="1d">Today</SelectItem>
+              <SelectItem value="7d">Last 7 days</SelectItem>
+              <SelectItem value="30d">Last 30 days</SelectItem>
             </SelectContent>
           </Select>
           <button
             onClick={handleRefresh}
             disabled={refreshing}
-            className="flex items-center justify-center w-10 h-10 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            aria-label="Refresh data"
+            className="w-10 h-10 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50 flex justify-center items-center"
           >
-            <RefreshCw
-              className={`h-5 w-5 text-gray-700 ${
-                refreshing ? "animate-spin" : ""
-              }`}
-            />
+            <RefreshCw className={`h-5 w-5 ${refreshing ? "animate-spin" : ""}`} />
           </button>
         </div>
       </CardHeader>
@@ -210,47 +179,24 @@ export function ChartAreaInteractive() {
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          className="chart-container aspect-auto h-[250px] w-full"
         >
           <ComposedChart data={filteredData}>
             <defs>
               <linearGradient id="fillPower" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-power)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-power)"
-                  stopOpacity={0.1}
-                />
+                <stop offset="5%" stopColor="#e6194B" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#e6194B" stopOpacity={0.1} />
               </linearGradient>
               <linearGradient id="fillCurrent" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-current)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-current)"
-                  stopOpacity={0.1}
-                />
+                <stop offset="5%" stopColor="#3cb44b" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#3cb44b" stopOpacity={0.1} />
               </linearGradient>
               <linearGradient id="fillVoltage" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-voltage)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-voltage)"
-                  stopOpacity={0.1}
-                />
+                <stop offset="5%" stopColor="#4363d8" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#4363d8" stopOpacity={0.1} />
               </linearGradient>
             </defs>
+
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey={timeRange === "1d" ? "hour" : "date"}
@@ -259,16 +205,12 @@ export function ChartAreaInteractive() {
               tickMargin={8}
               minTickGap={32}
               tickFormatter={(value) => {
-                if (timeRange === "1d") {
-                  return `${value}:00`;
-                } else {
-                  // Handle date string format from API
-                  const date = new Date(value);
-                  return date.toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                  });
-                }
+                if (timeRange === "1d") return `${value}:00`;
+                const date = new Date(value);
+                return date.toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                });
               }}
             />
             <YAxis
@@ -276,8 +218,8 @@ export function ChartAreaInteractive() {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => `${value}`}
               domain={[0, 5000]}
+              tickFormatter={(value) => `${value}`}
             />
             <YAxis
               yAxisId="right"
@@ -285,49 +227,48 @@ export function ChartAreaInteractive() {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => `${value}V`}
               domain={[200, 260]}
+              tickFormatter={(value) => `${value}V`}
             />
+
             <ChartTooltip
               cursor={false}
               content={
                 <ChartTooltipContent
                   labelFormatter={(value) => {
-                    if (timeRange === "1d") {
-                      return `${value}:00`;
-                    } else {
-                      // Handle date string format from API
-                      return new Date(value).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                      });
-                    }
+                    if (timeRange === "1d") return `${value}:00`;
+                    return new Date(value).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                    });
                   }}
                   indicator="dot"
                 />
               }
             />
+
             <Area
               dataKey="power"
               type="natural"
               fill="url(#fillPower)"
-              stroke="var(--color-power)"
+              stroke="#e6194B"
               yAxisId="left"
             />
             <Area
               dataKey="current"
               type="natural"
               fill="url(#fillCurrent)"
-              stroke="var(--color-current)"
+              stroke="#3cb44b"
               yAxisId="left"
             />
             <Area
               dataKey="voltage"
               type="natural"
               fill="url(#fillVoltage)"
-              stroke="var(--color-voltage)"
+              stroke="#4363d8"
               yAxisId="right"
             />
+
             <ChartLegend content={<ChartLegendContent />} />
           </ComposedChart>
         </ChartContainer>

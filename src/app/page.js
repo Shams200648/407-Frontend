@@ -6,12 +6,15 @@ import React, { useEffect, useState } from "react";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto p-6 space-y-6">
-        <App />
-        <div className="flex justify-end">
+    <div className="min-h-screen bg-gradient-to-br from-gray-800 to-gray-100 relative">
+      <div className="container mx-auto p-6 space-y-6 relative">
+        {/* DeviceControl button positioned a bit lower on top right */}
+        <div className="absolute top-30 right-6">
           <DeviceControl />
         </div>
+
+        <App />
+
         <ChartAreaInteractive />
       </div>
     </div>
@@ -25,14 +28,10 @@ function App() {
   useEffect(() => {
     const ws = new WebSocket("wss://four07-backend.onrender.com");
 
-    ws.onopen = () => {
-      console.log("WebSocket connected");
-    };
-
+    ws.onopen = () => console.log("WebSocket connected");
     ws.onmessage = (event) => {
       try {
         const newData = JSON.parse(event.data);
-        console.log("📡 Data received:", newData);
         setData(newData);
         setBlink(true);
         setTimeout(() => setBlink(false), 150);
@@ -40,15 +39,8 @@ function App() {
         console.error("Error parsing message", err);
       }
     };
-
-    ws.onerror = (err) => {
-      console.error("WebSocket error", err);
-    };
-
-    ws.onclose = () => {
-      console.warn("WebSocket closed");
-    };
-
+    ws.onerror = (err) => console.error("WebSocket error", err);
+    ws.onclose = () => console.warn("WebSocket closed");
     return () => ws.close();
   }, []);
 
@@ -58,27 +50,36 @@ function App() {
 
   return (
     <div className="font-sans p-6">
-      <h1 className="text-3xl font-bold mb-6"> Power Consumsion Monitoring Dashboard</h1>
+      <h1 className="text-3xl font-bold mb-6 text-white">
+        Power Consumption Monitoring Dashboard From IoT Device
+      </h1>
 
       {data ? (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-xl">
-          <div className="bg-white p-4 rounded-lg shadow-sm border">
-            <div className="text-sm font-medium text-gray-500 mb-1">Time</div>
-            <div className={`font-semibold ${blinkClass}`}>
+        <div className="flex flex-col gap-3 w-60"> {/* ⬅ Compact vertical stack on left */}
+          {/* Time */}
+          <div className="p-4 rounded-lg shadow border hover:shadow-lg transition duration-200 bg-blue-100 hover:bg-blue-200">
+            <div className="text-sm font-medium text-gray-700 mb-1">Time</div>
+            <div className={`font-semibold text-blue-900 ${blinkClass}`}>
               {new Date(data.time).toLocaleTimeString()}
             </div>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border">
-            <div className="text-sm font-medium text-gray-500 mb-1">Current</div>
-            <div className="font-semibold">{data.current} mA</div>
+
+          {/* Current */}
+          <div className="p-4 rounded-lg shadow border hover:shadow-lg transition duration-200 bg-green-100 hover:bg-green-200">
+            <div className="text-sm font-medium text-gray-700 mb-1">Current</div>
+            <div className="font-semibold text-green-900">{data.current} mA</div>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border">
-            <div className="text-sm font-medium text-gray-500 mb-1">Voltage</div>
-            <div className="font-semibold">{data.voltage} V</div>
+
+          {/* Voltage */}
+          <div className="p-4 rounded-lg shadow border hover:shadow-lg transition duration-200 bg-yellow-100 hover:bg-yellow-200">
+            <div className="text-sm font-medium text-gray-700 mb-1">Voltage</div>
+            <div className="font-semibold text-yellow-900">{data.voltage} V</div>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border">
-            <div className="text-sm font-medium text-gray-500 mb-1">Power</div>
-            <div className="font-semibold">{data.power} W</div>
+
+          {/* Power */}
+          <div className="p-4 rounded-lg shadow border hover:shadow-lg transition duration-200 bg-red-100 hover:bg-red-200">
+            <div className="text-sm font-medium text-gray-700 mb-1">Power</div>
+            <div className="font-semibold text-red-900">{data.power} W</div>
           </div>
         </div>
       ) : (

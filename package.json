@@ -2,7 +2,7 @@
   "name": "tuya-web",
   "version": "0.1.0",
   "private": true,
-  "author": "Faisal Ahmed",
+  "author": "Shams",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -15,6 +15,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.536.0",
     "next": "^15.4.5",
+    "node": "^24.5.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "recharts": "^2.15.4",

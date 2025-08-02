@@ -67,7 +67,6 @@ export function DeviceControl() {
       }
     } catch (err) {
       console.error("Error controlling device switch:", err);
-      // Revert the switch state on error
       setSwitchState(!checked);
       alert(`Failed to switch device: ${err.message}`);
     } finally {
@@ -76,7 +75,7 @@ export function DeviceControl() {
   };
 
   return (
-    <Card className="w-64">
+    <Card className="w-64 bg-purple-200 shadow-md rounded-lg border border-green-600">
       <CardHeader className="pb-3">
         <CardTitle className="text-base font-semibold">
           Device Control Switch
@@ -85,10 +84,10 @@ export function DeviceControl() {
       <CardContent>
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
-            <span className="text-sm font-medium text-gray-700">
-              Click to the switch to turn the device
+            <span className="text-sm font-medium text-gray-800">
+              Click the switch to turn the device
             </span>
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-gray-600">
               {initialLoading
                 ? "Loading..."
                 : switchState
@@ -100,7 +99,7 @@ export function DeviceControl() {
             checked={switchState}
             onCheckedChange={handleSwitchToggle}
             disabled={switchLoading || initialLoading}
-            className="scale-110"
+            className="scale-110 data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-gray-300"
           />
         </div>
       </CardContent>

@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "tuya app by F",
+  title: "CSE407 IoT Device Power Consumption App By Shams",
   description: "",
 };
 

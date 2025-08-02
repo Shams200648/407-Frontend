@@ -23,7 +23,7 @@ function App() {
   const [blink, setBlink] = useState(false);
 
   useEffect(() => {
-    const ws = new WebSocket("wss://toda-backend-tr28.onrender.com");
+    const ws = new WebSocket("wss://four07-backend.onrender.com");
 
     ws.onopen = () => {
       console.log("WebSocket connected");
@@ -37,16 +37,16 @@ function App() {
         setBlink(true);
         setTimeout(() => setBlink(false), 150);
       } catch (err) {
-        console.error("❌ Error parsing message", err);
+        console.error("Error parsing message", err);
       }
     };
 
     ws.onerror = (err) => {
-      console.error("❌ WebSocket error", err);
+      console.error("WebSocket error", err);
     };
 
     ws.onclose = () => {
-      console.warn("⚠️ WebSocket closed");
+      console.warn("WebSocket closed");
     };
 
     return () => ws.close();

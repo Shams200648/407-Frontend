@@ -14,7 +14,7 @@ export function DeviceControl() {
     const fetchSwitchStatus = async () => {
       try {
         const response = await fetch(
-          "https://toda-backend-tr28.onrender.com/switch-status"
+          "https://four07-backend.onrender.com/switch-status"
         );
 
         if (!response.ok) {
@@ -43,7 +43,7 @@ export function DeviceControl() {
     try {
       setSwitchLoading(true);
       const response = await fetch(
-        "https://toda-backend-tr28.onrender.com/switch",
+        "https://four07-backend.onrender.com/switch",
         {
           method: "POST",
           headers: {

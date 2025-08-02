@@ -65,7 +65,7 @@ export function ChartAreaInteractive() {
       }
       setError(null);
       const response = await fetch(
-        "https://toda-backend-tr28.onrender.com/main-chart/data"
+        "https://four07-backend.onrender.com/main-chart/data"
       );
 
       if (!response.ok) {
